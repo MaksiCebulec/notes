@@ -1,0 +1,92 @@
+
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<section>
+    <label for="filters">Filter: </label>
+
+    <select [(ngModel)]="selectedFilter" id="filters" (change)="filterNotes()">
+      <option value="all">All</option>
+      <option value="favourites">Favourites</option>
+      <option value="createdToday">Created Today</option>
+    </select>
+
+</section>
+<section>
+    <div class="container bootstrap snippet">
+        <div class="row">
+            <ul class="notes">
+                <li *ngFor="let note of filteredNotes">
+                    <div class="rotate-1 lazur-bg">
+                        <small>{{note.date}}</small>
+                        <h4>{{note.title}}</h4>
+                        <p [innerHTML]="note.description.replaceAll('\n', '<br/>')"></p>
+                        <p>{{note.tag}}</p>
+                        <a href="#" (click)="updateNoteClicked(note)" class="pull-right"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                        <br>
+                        <br>
+                        <a href="#" (click)="deleteNote(note.id)" class="text-danger pull-right"><i class="fa fa-trash-o "></i></a>
+                        <br>
+                        <br>
+                        <a href="#" (click)="addToFavourite(note.id)" class="text-warning pull-right">
+                            <i *ngIf="!note.favourite" class="fa fa-star-o" aria-hidden="true"></i>
+                            <i *ngIf="note.favourite" class="fa fa-star" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </li>
+                <li >
+                    <div class="rotate-1 lazur-bg" style="display: flex; align-items: center; justify-content: center;">
+                            <svg style="cursor: pointer;" (click)="addNoteClicked()" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                            </svg>
+                    </div>
+                </li>  
+            </ul>  
+        </div>
+    </div>
+</section>
+
+<div class="container mt-5" *ngIf="showAddForm">
+    <h2>Add New Note</h2>
+    <form #addForm="ngForm" (ngSubmit)="onAddNote(addForm)">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" ngModel name="title" class="form-control" id="title" placeholder="Enter Title">
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea ngModel name="description" class="form-control" id="description" placeholder="Enter Description"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="tag">Tag</label>
+        <input type="text" ngModel name="tag" class="form-control" id="tag" placeholder="Enter Tag">
+      </div>
+      <div style="display: flex; justify-content: space-around;">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" (click)="closeForm()" class="btn btn-danger">Close</button>
+      </div>
+    </form>
+</div>
+
+<div class="container mt-5" *ngIf="showEditForm">
+    <h2>Edit Note</h2>
+    <form #editForm="ngForm" (ngSubmit)="onUpdateNote(editForm)">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" ngModel="{{editNote.title}}" name="title" class="form-control" id="title" placeholder="Enter Title">
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea type="text" ngModel="{{editNote.description}}" name="description" class="form-control" id="description" placeholder="Enter Description"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="tag">Tag</label>
+        <input type="text" ngModel="{{editNote.tag}}" name="tag" class="form-control" id="tag" placeholder="Enter Tag">
+      </div>
+      <div style="display: flex; justify-content: space-around;">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" (click)="closeForm()" class="btn btn-danger">Close</button>
+      </div>
+      
+    </form>
+</div>
